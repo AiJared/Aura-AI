@@ -3,3 +3,4 @@ pychache/
 db.sqlite3
 .vscode/
 .git/
+.cpython

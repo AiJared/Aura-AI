@@ -9,7 +9,7 @@ from accounts.tokens import account_activation_token
 
 
 
-def send_activation_email(user,request, email_template='acc_active.html'):
+def send_activation_email(user,request, email_template='accounts/acc_active.html'):
     current_site = get_current_site(request)  # Use None because there's no request in this context
     mail_subject = 'Verify your account'
     message = render_to_string(email_template, {
