@@ -1,0 +1,105 @@
+import datetime
+from accounts.decorators import administrator_required, client_required
+from .tokens import account_activation_token 
+from django.contrib.sites.shortcuts import get_current_site  
+from django.utils.encoding import force_bytes, force_str  
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
+from django.template.loader import render_to_string 
+from accounts.models import Administrator, Client, User
+from accounts.sendMails import  send_activation_email
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.cache import never_cache
+from django.views.generic import CreateView
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.contrib.auth import get_user_model
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
+from django.views.generic.edit import CreateView
+
+decorators = [never_cache, login_required, administrator_required]
+
+def homepage(request):
+    return render(request, 'index.html')
+
+def clientRegistration(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        username = request.POST.get("username")
+        full_name = request.POST.get("full_name")
+        password = request.POST.get('password')
+        password2 = request.POST.get('confirm-password')
+
+        if password != password2:
+            messages.error(request,"Password didn't match")
+            return render(request,'accounts/sign_up.html')
+        user = User(email=email, username=username, full_name=full_name)
+        user.set_password(password2)
+        user.is_active = False
+        user.save()
+        send_activation_email(user,request)
+        
+        client = Client(user=user)
+        client.save()
+        messages.success(request,"Account created succesfully")
+        return render(request,'accounts/sign_alert.html')
+    return render(request,'accounts/sign_up.html')
+
+
+def login_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        try:
+            user= User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, 'email does not exist!') 
+        user = authenticate(request, email=email, password=password)
+        
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                messages.success(request, 'Logged in succesfully')
+                return redirect('/home/')
+            else:
+                messages.error(request, 'Please activate your account')
+                return redirect('/login/') 
+        else:
+            messages.error(request, 'Incorrect password')
+            return redirect('/login/')
+    return render(request,'accounts/login.html')
+
+#logout the logged in user   
+def log_out(request):
+    logout(request)
+    return redirect('/home/')
+
+def RequestPasswordReset(request):
+    context = {
+        # Add context data as needed
+    }
+    return render(request, "accounts/RequestPasswordReset.html", context)
+
+
+
+def activate(request, uidb64, token):  
+    User = get_user_model() 
+    
+    try:  
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid) 
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):  
+        user = None  
+    if user is not None and account_activation_token.check_token(user, token):  
+        user.is_active = True  
+        user.save()
+        login(request,user)  
+        messages.success(request,"Account was Successfully Verified.")
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')  
+    else:  
+        return HttpResponse('Activation link is invalid!')
+
+
