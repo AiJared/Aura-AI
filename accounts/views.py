@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str  
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 from django.template.loader import render_to_string 
-from accounts.models import Administrator, Client, User
+from accounts.models import Administrator, Client, User, Psychiatrist
 from accounts.sendMails import  send_activation_email
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -49,6 +49,31 @@ def clientRegistration(request):
     return render(request,'accounts/sign_up.html')
 
 
+def psycRegistration(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        username = request.POST.get("username")
+        full_name = request.POST.get("full_name")
+        kmpdb = request.POST.get("kmpdb")
+        password = request.POST.get('password')
+        password2 = request.POST.get('confirm-password')
+
+        if password != password2:
+            messages.error(request,"Password didn't match")
+            return render(request,'accounts/psycsign_up.html')
+        user = User(email=email, username=username, full_name=full_name, kmpdb=kmpdb)
+        user.set_password(password2)
+        user.is_active = False
+        user.save()
+        send_activation_email(user,request)
+        
+        client = Client(user=user)
+        client.save()
+        messages.success(request,"Account created succesfully")
+        return render(request,'accounts/sign_alert.html')
+    return render(request,'accounts/psycsign_up.html')
+
+
 def login_user(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -71,6 +96,38 @@ def login_user(request):
             messages.error(request, 'Incorrect password')
             return redirect('/login/')
     return render(request,'accounts/login.html')
+
+def psyclogin(request):
+    
+    if request.user.is_authenticated:
+        return redirect('/')
+    if request.method == 'POST':
+        kmpdb = request.POST.get('kmpdb')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        try:
+            medics = Psychiatrist.objects.get(kmpdb=kmpdb)
+        except Psychiatrist.DoesNotExist:
+            messages.error(request, 'KMPDB number does not exist!')
+            return redirect('/')
+        if medics.user.email == email:
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    messages.success(request, 'Logged in successfully')
+                    return redirect('/d')
+                else:
+                    messages.error(request, 'Please activate your account')
+                    return redirect('/')
+            else:
+                messages.error(request, 'Invalid password')
+                return redirect('/')
+        else:
+            messages.error(request, 'Email does not match')
+            return redirect('/')
+    return render(request,'psyclogin.html',{'medics':'medics'})
+
 
 #logout the logged in user   
 def log_out(request):
