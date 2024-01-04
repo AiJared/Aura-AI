@@ -1,5 +1,5 @@
 from django.urls import path
-from accounts.views import homepage, clientRegistration, login_user, activate
+from accounts.views import homepage, clientRegistration, login_user,psyclogin, psycRegistration ,activate
 
 app_name = "accounts"
 
@@ -7,6 +7,8 @@ urlpatterns = [
     path('', homepage, name='home'),
     path('login/', login_user, name='login'),
     path('register/', clientRegistration, name="sign-up"),
+    path('psyclogin/', psyclogin, name='psyclogin'),
+    path('psycregister/', psycRegistration, name="psycsign-up"),
     path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
     # path('reset/<str:uidb64>/<str:token>/<str:password>/', reset, name='reset'),
 ]
