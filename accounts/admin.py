@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.contrib.auth.models import Group
-from accounts.models import (User, Administrator,Client)
+from accounts.models import (User, Administrator, Client, Psychiatrist)
 
 admin.site.unregister(Group)
 
@@ -29,6 +29,16 @@ class ClientAdmin(admin.ModelAdmin):
     search_fields = ["get_username",]
     list_display = ("get_username",)
     
+    def get_username(self, obj):
+        return obj.user.username
+    get_username.short_description = "Username"
+    get_username.admin_order_field = "user__username"
+
+@admin.register(Psychiatrist)
+class PsychiatristAdmin(admin.ModelAdmin):
+    search_fields = ["get_username",]
+    list_display = ("get_username","kmpdb",)
+
     def get_username(self, obj):
         return obj.user.username
     get_username.short_description = "Username"
