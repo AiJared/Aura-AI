@@ -151,3 +151,5 @@ class Client(Profile):
     def __str__(self):
         return self.user.username
     
+class Psychiatrist(Profile):
+    kmpdb = models.CharField(_("KMPDB NUMBER"), max_length=100, blank=False, null=False, unique=True)
