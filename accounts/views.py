@@ -71,7 +71,7 @@ def psycRegistration(request):
         client.save()
         messages.success(request,"Account created succesfully")
         return render(request,'accounts/sign_alert.html')
-    return render(request,'accounts/psycsign_up.html')
+    return render(request,'accounts/psycsignup.html')
 
 
 def login_user(request):
@@ -98,35 +98,28 @@ def login_user(request):
     return render(request,'accounts/login.html')
 
 def psyclogin(request):
-    
-    if request.user.is_authenticated:
-        return redirect('/')
     if request.method == 'POST':
-        kmpdb = request.POST.get('kmpdb')
         email = request.POST.get('email')
+        kmpdb = request.POST.get('kmpdb')
         password = request.POST.get('password')
         try:
-            medics = Psychiatrist.objects.get(kmpdb=kmpdb)
-        except Psychiatrist.DoesNotExist:
-            messages.error(request, 'KMPDB number does not exist!')
-            return redirect('/')
-        if medics.user.email == email:
-            user = authenticate(request, email=email, password=password)
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    messages.success(request, 'Logged in successfully')
-                    return redirect('/d')
-                else:
-                    messages.error(request, 'Please activate your account')
-                    return redirect('/')
+            user= User.objects.get(email=email, kmpdb=kmpdb)
+        except User.DoesNotExist:
+            messages.error(request, 'email does not exist!') 
+        user = authenticate(request, email=email, password=password)
+        
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                messages.success(request, 'Logged in succesfully')
+                return redirect('/home/')
             else:
-                messages.error(request, 'Invalid password')
-                return redirect('/')
+                messages.error(request, 'Please activate your account')
+                return redirect('/psyclogin/') 
         else:
-            messages.error(request, 'Email does not match')
-            return redirect('/')
-    return render(request,'psyclogin.html',{'medics':'medics'})
+            messages.error(request, 'Incorrect password')
+            return redirect('/psyclogin/')
+    return render(request,'accounts/psyclogin.html')
 
 
 #logout the logged in user   
