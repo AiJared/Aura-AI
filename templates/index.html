@@ -239,34 +239,18 @@
 
         <div class="container">
           <div class="row">
+            {% for i in itworks %}
+
             <div class="col-sm-6 col-lg-3 mb-4">
-              <div class="card h-100 shadow card-span rounded-3"><img class="card-img-top rounded-top-3" src="static/assets/img/gallery/AIChatbots1.png" alt="function" />
+              <div class="card h-100 shadow card-span rounded-3"><img class="card-img-top rounded-top-3" src="/media/{{i.image}}" alt="function" />
                 <div class="card-body"><span class="fs--1 text-primary me-3">Mental Health</span>
-                  <h5 class="font-base fs-lg-0 fs-xl-1 my-3">It first gets to know the client by engaging with him/her in a human like conversation as it tries to figure out the problem.</h5>
+                  <h5 class="font-base fs-lg-0 fs-xl-1 my-3"> {{ i.desc }} </h5>
                 </div>
               </div>
             </div>
-            <div class="col-sm-6 col-lg-3 mb-4">
-              <div class="card h-100 shadow card-span rounded-3"><img class="card-img-top rounded-top-3" src="static/assets/img/gallery/AIandMentalHealth3.jpeg" alt="function" />
-                <div class="card-body"><span class="fs--1 text-primary me-3">Mental Health</span>
-                  <h5 class="font-base fs-lg-0 fs-xl-1 my-3">From the conversation, Aura AI then identifies the type of mental health problem affecting the client.</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3 mb-4">
-              <div class="card h-100 shadow card-span rounded-3"><img class="card-img-top rounded-top-3" src="static/assets/img/gallery/AIandMentalHealth2.jpg" alt="function" />
-                <div class="card-body"><span class="fs--1 text-primary me-3">Mental Health</span>
-                  <h5 class="font-base fs-lg-0 fs-xl-1 my-3">After Identifiying the type of mental health problem affecting the client, it then works to figure out the best solution possible, such as suggesting certain specific treatment or copying mechanisms.</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3 mb-4">
-              <div class="card h-100 shadow card-span rounded-3"><img class="card-img-top rounded-top-3" src="static/assets/img/gallery/mentalh3.jpg" alt="function" />
-                <div class="card-body"><span class="fs--1 text-primary me-3">Mental Health</span>
-                  <h5 class="font-base fs-lg-0 fs-xl-1 my-3">Finally, after identifying the best approach to solving the problem, Aura AI then suggests the solutions to the client based on the client's specific mental health problem.</h5>
-                </div>
-              </div>
-            </div>
+
+            {% endfor %}
+            
           </div>
         </div>
       </section>
@@ -320,7 +304,7 @@
           <div class="container">
             <div class="row justify-content-md-between justify-content-evenly py-4">
               <div class="col-12 col-sm-8 col-md-6 col-lg-auto text-center text-md-start">
-                <p class="fs--1 my-2 fw-bold text-200">All rights Reserved &copy; Aura AI, 2023</p>
+                <p class="fs--1 my-2 fw-bold text-200">All rights Reserved &copy; Aura AI, <script>document.write(new Date().getFullYear());</script></p>
               </div>
             </div>
           </div>

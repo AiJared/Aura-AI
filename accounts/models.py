@@ -64,7 +64,8 @@ class User(AbstractBaseUser, TrackingModel):
     username_validator = UnicodeUsernameValidator()
     Role_choices = (
         ("Administrator", "Administrator"),
-        ("Client", "Client")
+        ("Client", "Client"),
+        ("Psychiatrist", "Psychiatrist")
     )
     Gender_choices = (
         ("Male", "Male"),

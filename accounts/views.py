@@ -22,8 +22,7 @@ from django.views.generic.edit import CreateView
 
 decorators = [never_cache, login_required, administrator_required]
 
-def homepage(request):
-    return render(request, 'index.html')
+
 
 def clientRegistration(request):
     if request.method == 'POST':
@@ -61,16 +60,20 @@ def psycRegistration(request):
         if password != password2:
             messages.error(request,"Password didn't match")
             return render(request,'accounts/psycsign_up.html')
-        user = User(email=email, username=username, full_name=full_name, kmpdb=kmpdb)
+        user = User(email=email, username=username, full_name=full_name)
         user.set_password(password2)
+        user.role = 'Psychiatrist'
         user.is_active = False
         user.save()
         send_activation_email(user,request)
         
-        client = Client(user=user)
-        client.save()
+        psyco = Psychiatrist(user=user,kmpdb=kmpdb)
+        psyco.save()
         messages.success(request,"Account created succesfully")
-        return render(request,'accounts/sign_alert.html')
+        context = {
+            'psyco':True,
+        }
+        return render(request,'accounts/sign_alert.html',context)
     return render(request,'accounts/psycsignup.html')
 
 
@@ -103,21 +106,26 @@ def psyclogin(request):
         kmpdb = request.POST.get('kmpdb')
         password = request.POST.get('password')
         try:
-            user= User.objects.get(email=email, kmpdb=kmpdb)
-        except User.DoesNotExist:
-            messages.error(request, 'email does not exist!') 
-        user = authenticate(request, email=email, password=password)
+            psyco= Psychiatrist.objects.get(kmpdb=kmpdb)
+        except Psychiatrist.DoesNotExist:
+            messages.error(request, 'Psychiatrist does not exist!')
+            return redirect('/psyclogin/') 
+        if psyco.user.email == email:
+            user = authenticate(request, email=email, password=password)
         
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                messages.success(request, 'Logged in succesfully')
-                return redirect('/home/')
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    messages.success(request, 'Logged in succesfully')
+                    return redirect('/home/')
+                else:
+                    messages.error(request, 'Please activate your account')
+                    return redirect('/psyclogin/') 
             else:
-                messages.error(request, 'Please activate your account')
-                return redirect('/psyclogin/') 
+                messages.error(request, 'Incorrect password')
+                return redirect('/psyclogin/')
         else:
-            messages.error(request, 'Incorrect password')
+            messages.error(request, 'Incorrect email')
             return redirect('/psyclogin/')
     return render(request,'accounts/psyclogin.html')
 

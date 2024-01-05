@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     # local applications
     'accounts.apps.AccountsConfig',
+    'aura',
 ]
 
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
