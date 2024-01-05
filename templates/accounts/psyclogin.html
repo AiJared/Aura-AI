@@ -2,12 +2,23 @@
 {% block title %}Login{% endblock title %}
 {% block act %}Login{% endblock act %}
 {% block content %}
+    
+    <ul>
+      {% for message in messages %}
+      <li>
+        {{message}}
+      </li>
+      {% endfor %}
+    </ul>
+    
     <form action="" method="post">
+
+      {% csrf_token %}
       <div class="input-box">
         <input type="text" name="email" placeholder="Enter your email" required>
       </div>
       <div class="input-box">
-        <input type="text" name="KMPDB" placeholder="Enter your KMPDB Number" required>
+        <input type="text" name="kmpdb" placeholder="Enter your KMPDB Number" required>
       </div>
       <div class="input-box">
         <input type="password" name="password" placeholder="Enter password" required>

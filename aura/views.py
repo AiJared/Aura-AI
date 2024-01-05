@@ -12,4 +12,7 @@ def homepage(request):
 
     return render(request, 'index.html',context)
 
+def phsycohomepage(request):
+    return render(request,'aura/index.html')
+
 # Create your views here.

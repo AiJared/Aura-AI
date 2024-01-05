@@ -91,13 +91,13 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 messages.success(request, 'Logged in succesfully')
-                return redirect('/home/')
+                return redirect('/')
             else:
                 messages.error(request, 'Please activate your account')
                 return redirect('/login/') 
         else:
             messages.error(request, 'Incorrect password')
-            return redirect('/login/')
+            return redirect('/accounts/login/')
     return render(request,'accounts/login.html')
 
 def psyclogin(request):
@@ -109,7 +109,7 @@ def psyclogin(request):
             psyco= Psychiatrist.objects.get(kmpdb=kmpdb)
         except Psychiatrist.DoesNotExist:
             messages.error(request, 'Psychiatrist does not exist!')
-            return redirect('/psyclogin/') 
+            return redirect('/accounts/psyclogin/') 
         if psyco.user.email == email:
             user = authenticate(request, email=email, password=password)
         
@@ -117,23 +117,23 @@ def psyclogin(request):
                 if user.is_active:
                     login(request, user)
                     messages.success(request, 'Logged in succesfully')
-                    return redirect('/home/')
+                    return redirect('/dashboard/')
                 else:
                     messages.error(request, 'Please activate your account')
-                    return redirect('/psyclogin/') 
+                    return redirect('/accounts/psyclogin/') 
             else:
                 messages.error(request, 'Incorrect password')
-                return redirect('/psyclogin/')
+                return redirect('/accounts/psyclogin/')
         else:
             messages.error(request, 'Incorrect email')
-            return redirect('/psyclogin/')
+            return redirect('/accounts/psyclogin/')
     return render(request,'accounts/psyclogin.html')
 
 
 #logout the logged in user   
 def log_out(request):
     logout(request)
-    return redirect('/home/')
+    return redirect('/')
 
 def RequestPasswordReset(request):
     context = {
