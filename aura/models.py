@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import Client,Psychiatrist
 
 class Services(models.Model):
     title = models.CharField(max_length=100)
@@ -16,4 +17,11 @@ class Itworks(models.Model):
     def __str__(self):
         return self.desc[:8]  
 
-# Create your models here.
+class Meeting(models.Model):
+    client = models.ForeignKey(Client, blank=True, null=True, on_delete=models.SET_NULL)
+    pychiatrist = models.ForeignKey(Psychiatrist, blank=True, null=True, on_delete=models.SET_NULL)
+    date = models.DateTimeField(blank=True, null=True)
+    is_done = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.client
