@@ -7,6 +7,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string 
 from accounts.models import Administrator, Client, User, Psychiatrist
 from accounts.sendMails import  send_activation_email
+from accounts.forms import ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -161,3 +162,25 @@ def activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 
+def edit_profile(request):
+    r_user = User.objects.get(id=request.user.id)
+    if request.user.role == 'Psychiatrist':
+        user = Psychiatrist.objects.get(user=r_user)
+    else:
+        user = Client.objects.get(user=r_user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=user, user=r_user)
+        if form.is_valid():
+            phone = form.cleaned_data['phone']
+            full_name = form.cleaned_data['full_name']
+            profile_picture = form.cleaned_data['profile_picture']
+            form.save()
+            r_user.phone = phone
+            r_user.full_name = full_name
+            r_user.save()
+            messages.success(request, 'Updated succesfully')
+            return redirect('/')
+    else:
+        form = ProfileForm(instance=user, user=r_user)
+
+    return render(request, 'accounts/profile.html', {'form': form,})

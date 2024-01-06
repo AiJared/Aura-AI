@@ -1,11 +1,15 @@
 from django.urls import path
-from accounts.views import  clientRegistration, login_user,psyclogin, psycRegistration ,activate,log_out
+from accounts.views import  (
+    clientRegistration, login_user,psyclogin, 
+    psycRegistration ,activate,log_out,edit_profile
+)
 
 app_name = "accounts"
 
 urlpatterns = [
     path('login/', login_user, name='login'),
     path('register/', clientRegistration, name="sign-up"),
+    path('update-profile/', edit_profile, name='update-profile'),
     path('logout/', log_out, name='logout'),
     path('psyclogin/', psyclogin, name='psyclogin'),
     path('psycregister/', psycRegistration, name="psycsign-up"),
