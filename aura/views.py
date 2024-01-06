@@ -25,7 +25,7 @@ def phsycohomepage(request):
         'done': done,
         'all':all,
     }
-    return render(request,'aura/index.html', context)
+    return render(request,'aura/psycdashboard.html', context)
 
 @login_required
 def videocall(request):
