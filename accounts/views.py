@@ -92,7 +92,7 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 messages.success(request, 'Logged in succesfully')
-                return redirect('/')
+                return redirect('/clientdashboard/')
             else:
                 messages.error(request, 'Please activate your account')
                 return redirect('/login/') 
