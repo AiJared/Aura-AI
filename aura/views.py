@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from aura.models import Services,Itworks
+from aura.models import Services, Itworks, Meeting
+from accounts.models import Psychiatrist, Client
 
 def homepage(request):
     itworks = Itworks.objects.all()
@@ -15,11 +16,23 @@ def homepage(request):
 
 @login_required
 def phsycohomepage(request):
-    return render(request,'aura/index.html')
+    psyco = Psychiatrist.objects.get(user= request.user)
+    requested = Meeting.objects.filter(pychiatrist = psyco,is_done=False)
+    done = Meeting.objects.filter(pychiatrist = psyco,is_done=True)
+    all = Meeting.objects.all()
+    context = {
+        'requested':requested,
+        'done': done,
+        'all':all,
+    }
+    return render(request,'aura/index.html', context)
 
 @login_required
 def videocall(request):
-    return render(request, 'aura/videocall.html', {'name': request.user.first_name + " " + request.user.last_name})
+    if request.method == 'POST':
+        roomID = request.POST.get('roomID')
+        print(roomID)
+    return render(request, 'aura/videocall.html', {'name': request.user.full_name})
 
 @login_required
 def join_room(request):
@@ -27,3 +40,4 @@ def join_room(request):
         roomID = request.POST['roomID']
         return redirect("/meeting?roomID=" + roomID)
     return render(request, 'aura/joinroom.html')
+

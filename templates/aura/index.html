@@ -33,13 +33,13 @@
             <div class="page-body">
                 <div class="row">
                     <!-- task, page, download counter  start -->
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-block">
                                 <div class="row align-items-center">
                                     <div class="col-8">
                                         <h4 class="text-c-purple">{{dis}}</h4>
-                                        <h6 class="text-muted m-b-0">Reported Diseases</h6>
+                                        <h6 class="text-muted m-b-0">Requested Sessions</h6>
                                     </div>
                                     <div class="col-4 text-right">
                                         <i class="fa fa-bar-chart f-28"></i>
@@ -59,13 +59,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-block">
                                 <div class="row align-items-center">
                                     <div class="col-8">
                                         <h4 class="text-c-blue">{{ambu|length}}</h4>
-                                        <h6 class="text-muted m-b-0">Ordered Ambulances</h6>
+                                        <h6 class="text-muted m-b-0">Concluded Sessions</h6>
                                     </div>
                                     <div class="col-4 text-right">
                                         <i class="fa fa-hand-o-down f-28"></i>
@@ -84,13 +84,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-block">
                                 <div class="row align-items-center">
                                     <div class="col-8">
                                         <h4 class="text-c-green">{{patients|length}}</h4>
-                                        <h6 class="text-muted m-b-0">Total Patients</h6>
+                                        <h6 class="text-muted m-b-0">Total Sessions</h6>
                                     </div>
                                     <div class="col-4 text-right">
                                         <i class="fa fa-file-text-o f-28"></i>
@@ -109,40 +109,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card">
-                            <div class="card-block">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-c-red">{{doctors|length}}</h4>
-                                        <h6 class="text-muted m-b-0">Total Doctors</h6>
-                                    </div>
-                                    <div class="col-4 text-right">
-                                        <i class="fa fa-calendar-check-o f-28"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-c-red">
-                                <div class="row align-items-center">
-                                    <div class="col-9">
-                                        <p class="text-white m-b-0">% change</p>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <i class="fa fa-line-chart text-white f-16"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     
-
                     <!-- task, page, download counter  end -->
 
                     <!--  project and team member start -->
-                    <div class="col-xl-8 col-md-12">
+                    <div class="col-xl-12 col-md-12">
                         <div class="card table-card">
                             <div class="card-header">
-                                <h5>Resent Patients</h5>
+                                <h5>Resent Clients</h5>
                                 <div class="card-header-right">
                                     <ul class="list-unstyled card-option">
                                         <li><i class="fa fa fa-wrench open-card-option"></i>
@@ -160,10 +134,9 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    Patient Name
+                                                    Client Name
                                                 </th>
-                                                <th>IP/OP number</th>
-                                                <th>Date of Admmission</th>
+                                                <th>Meeting Date</th>
                                                 <!-- <th class="text-right">Priority</th> -->
                                             </tr>
                                         </thead>
@@ -189,39 +162,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-md-12">
-                        <div class="card ">
-                            <div class="card-header">
-                                <h5>Team Members</h5>
-                                <div class="card-header-right">
-                                    <ul class="list-unstyled card-option">
-                                        <li><i class="fa fa fa-wrench open-card-option"></i>
-                                        </li>
-                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-                                        <li><i class="fa fa-minus minimize-card"></i></li>
-                                        <li><i class="fa fa-refresh reload-card"></i></li>
-                                        <li><i class="fa fa-trash close-card"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-block">
-                                {% for i in doctors %}
-                                <div class="align-middle m-b-30">
-                                    <img src="/media/{{ i.profile_picture }}" alt="user image"
-                                        class="img-radius img-40 align-top m-r-15">
-                                    <div class="d-inline-block">
-                                        <h6>{{i.user.first_name}} {% if i.user.middle_name %}
-                                            {{i.user.middle_name}}
-                                            {% endif %} {{i.user.last_name}}</h6>
-                                        <p class="text-muted m-b-0"></p>
-                                    </div>
-                                </div>
-                                {% endfor %}
-
-
-                            </div>
-                        </div>
-                    </div>
+                    
                     <!--  project and team member end -->
                 </div>
             </div>
