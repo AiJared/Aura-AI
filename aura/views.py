@@ -45,9 +45,9 @@ def videocall(request):
     meetingid = 23456
     context = {
         'name': request.user.full_name,
-        'id':meetingid
+        'id':meetingid,
     }
-    return render(request, 'aura/videocall.html', )
+    return render(request, 'aura/videocall.html', context)
 
 @login_required
 def join_room(request):

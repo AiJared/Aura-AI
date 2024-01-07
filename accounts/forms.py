@@ -5,8 +5,18 @@ from phonenumber_field.formfields import PhoneNumberField
 
 class ProfileForm(forms.ModelForm):
     
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(help_text='Make sure it is in the format <code> +12345678989 </code> ')
     full_name = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=50)
+    username = forms.CharField(max_length=50)
+    town = forms.CharField(max_length=50)
+    county = forms.CharField(max_length=50)
+
+    password1 = forms.CharField(
+        label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Password Confirmation",
+        widget=forms.PasswordInput)
     
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -14,11 +24,29 @@ class ProfileForm(forms.ModelForm):
         if user:
             self.fields['phone'].initial = user.phone
             self.fields['full_name'].initial = user.full_name
+            self.fields['email'].initial = user.email
+            self.fields['username'].initial = user.username
+            self.fields['town'].initial = user.town
+            self.fields['county'].initial = user.county
         for field_name, field in self.fields.items():
-            self.fields[field_name].widget.attrs.update({'class':'form-input'})
+            self.fields[field_name].widget.attrs.update({'class':'form-control'})
             # self.fields[field].widget.attrs.update({'style': 'width: 350px;'})
         # Set email field as read-only
+        self.fields['full_name'].widget.attrs.update({'readonly':True})
+        self.fields['email'].widget.attrs.update({'readonly':True})
+        self.fields['profile_picture'].widget.attrs.update({'class':'account-settings-fileinput'})
 
     class Meta:
         model = Profile
-        fields = ['phone','full_name','bio','profile_picture']
+        fields = ['phone','email','password1','password2','full_name','bio','profile_picture', 'username', 'town']
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+
+        print(f"Hello {password2}")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match!")
+
+        return password2

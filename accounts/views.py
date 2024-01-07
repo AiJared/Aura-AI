@@ -173,14 +173,21 @@ def edit_profile(request):
         if form.is_valid():
             phone = form.cleaned_data['phone']
             full_name = form.cleaned_data['full_name']
-            profile_picture = form.cleaned_data['profile_picture']
+            town = form.cleaned_data['town']
+            county = form.cleaned_data['county']
+            username = form.cleaned_data['username']
+            password2 = form.cleaned_data['password2']
+            image = request.FILES['image']
             form.save()
             r_user.phone = phone
             r_user.full_name = full_name
+            r_user.username = username
+            r_user.town = town
+            r_user.county = county
             r_user.save()
             messages.success(request, 'Updated succesfully')
-            return redirect('/')
+            return redirect('/dashboard/')
     else:
         form = ProfileForm(instance=user, user=r_user)
 
-    return render(request, 'accounts/profile.html', {'form': form,})
+    return render(request, 'accounts/profile.html', {'form': form,'user':user})
