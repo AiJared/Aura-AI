@@ -38,7 +38,7 @@
                             <div class="card-block">
                                 <div class="row align-items-center">
                                     <div class="col-8">
-                                        <h4 class="text-c-purple">0</h4>
+                                        <h4 class="text-c-purple">{{requested | length}}</h4>
                                         <h6 class="text-muted m-b-0">Requested Sessions</h6>
                                     </div>
                                     <div class="col-4 text-right">
@@ -64,11 +64,19 @@
                             <div class="card-block">
                                 <div class="row align-items-center">
                                     <div class="col-8">
-                                        <h4 class="text-c-blue">0</h4>
-                                        <h6 class="text-muted m-b-0">Concluded Sessions</h6>
+                                        <h4 class="text-c-blue">{{done|length}}</h4>
+                                        <h6 class="text-muted m-b-0">
+                                            
+                                            {% if user.role == 'Psychiatrist' %}
+                                            Concluded 
+                                            {% else %}
+                                                Approved
+                                            {% endif %}
+                                            Sessions  
+                                        </h6>
                                     </div>
                                     <div class="col-4 text-right">
-                                        <i class="fa fa-hand-o-down f-28"></i>
+                                        <i class="fa fa-hand-o-right f-28"></i>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +97,7 @@
                             <div class="card-block">
                                 <div class="row align-items-center">
                                     <div class="col-8">
-                                        <h4 class="text-c-green">{{patients|length}}</h4>
+                                        <h4 class="text-c-green">{{all|length}}</h4>
                                         <h6 class="text-muted m-b-0">Total Sessions</h6>
                                     </div>
                                     <div class="col-4 text-right">
@@ -116,7 +124,7 @@
                     <div class="col-xl-12 col-md-12">
                         <div class="card table-card">
                             <div class="card-header">
-                                <h5>Resent Clients</h5>
+                                <h5>Requests</h5>
                                 <div class="card-header-right">
                                     <ul class="list-unstyled card-option">
                                         <li><i class="fa fa fa-wrench open-card-option"></i>
@@ -134,21 +142,98 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    Client Name
+                                                    
+                                                    {% if user.role == 'Psychiatrist' %}
+                                                        Client Name
+                                                    {% else %}
+                                                        Psychiatrist Name
+                                                    {% endif %}
+                                                        
                                                 </th>
+                                                <th>Meeting Code</th>
                                                 <th>Meeting Date</th>
+                                                <th>Actions</th>
                                                 <!-- <th class="text-right">Priority</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                            {% for i in patients %}
+                                            {% for i in all %}
                                             <tr>
                                                 <td>
-                                                    {{i.full_name}}
+                                                    
+                                                    {% if user.role == 'Psychiatrist' %}
+                                                        {{i.client}}
+                                                    {% else %}
+                                                        {{i.pychiatrist}}
+                                                    {% endif %}
+                                                        
                                                 </td>
-                                                <td>{{i.ip_op_number}}</td>
-                                                <td>{{i.reported_at}}</td>
+                                                <td>
+                                                    {% if i.meetingID %}
+                                                        {{i.meetingID}}
+                                                    {% else %}
+                                                      <p>Not Created</p>
+                                                    {% endif %}
+                                                    
+                                                </td>
+                                                <td>
+                                                    
+                                                    {% if i.date %}
+                                                        {{i.date}}
+                                                    {% else %}
+                                                        <p>Not Scheduled</p>
+                                                    {% endif %}
+                                                        
+                                                </td>
+                                                <td>
+                                                    
+                                                    {% if user.role == 'Psychiatrist' %}
+                                                        
+                                                        {% if i.approved  %}
+                                                            
+                                                            {% if i.date %}
+                                                                
+                                                                {% if i.meetingID  %}
+                                                                    
+                                                                    {% if i.is_done %}
+                                                                       <p>Done</p> 
+                                                                    {% else %}
+                                                                        <a href="{% url 'aura:join-room' i.meetingID %}" class="btn btn-success" >Join Metting</a>
+                                                                        <a href="{% url 'aura:end-meeting' i.id %}" class="btn btn-danger" >Mark Done</a>
+                                                                    {% endif %}
+                                                                        
+                                                                {% else %}
+                                                                    <a href="/create-meeting/{{i.id}}/" class="btn btn-success" >New Metting</a>
+                                                                {% endif %}
+                                                                    
+                                                               
+                                                            {% else %}
+                                                                <a href="/schedule-meeting/{{i.id}}/" class="btn btn-info" >Schedule Metting</a>
+                                                            {% endif %}
+                                                                
+                                                        {% else %}
+                                                            <a href="/approve-meeting/{{i.id}}/" class="btn btn-primary" >Approve Metting</a>
+                                                        {% endif %}
+                                                            
+                                                        <!-- href="{% url 'rentals:room' room.id " -->
+                                                    {% else %}
+                                                        
+                                                        {% if i.meetingID %}
+                                                            
+                                                            {% if i.is_done %}
+                                                                <p>Done</p>
+                                                            {% else %}
+                                                                <a href="{% url 'aura:join-room' i.meetingID %}" class="btn btn-success" >Join Metting</a>
+                                                            {% endif %}
+                                                                
+                                                        {% else %}
+                                                            <a href="" class="btn btn-primary" >Waiting for Meeting </a>
+                                                        {% endif %}
+                                                            
+                                                    {% endif %}
+                                                        
+                                                </td>
                                             </tr>
                                             {% endfor %}
 

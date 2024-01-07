@@ -22,7 +22,8 @@ class Meeting(models.Model):
     pychiatrist = models.ForeignKey(Psychiatrist, blank=True, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(blank=True, null=True)
     is_done = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
     meetingID = models.CharField(max_length=255,blank=True, null=True)
 
     def __str__(self):
-        return self.client
+        return f"{self.client} meets {self.pychiatrist}"

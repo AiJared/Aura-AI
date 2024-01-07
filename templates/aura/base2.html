@@ -8,6 +8,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    {% block header %}
+        
+    {% endblock header %}
+        
     <!-- Favicon icon -->
     <!-- <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon"> -->
     <!-- Google font-->
@@ -15,6 +20,7 @@
     <!-- waves.css -->
     <link rel="stylesheet" href="{% static 'assets2/pages/waves/css/waves.min.css' %}" type="text/css" media="all">
     <!-- Required Fremwork -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'assets2/css/bootstrap/css/bootstrap.min.css' %}">
     <!-- themify icon -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets2/icon/themify-icons/themify-icons.css' %}">
@@ -192,22 +198,42 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Work to be Done</div>
+                            <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Activities</div>
                             <ul class="pcoded-item pcoded-left-item">
-                                <li class="{% if nav == 'treat_p' %} active {% endif %}">
-                                    <a href="/meeting/" class="waves-effect waves-dark">
-                                        <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
-                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Create Meeting</span>
-                                        <span class="pcoded-mcaret"></span>
-                                    </a>
-                                </li>
-                                <li class="{% if nav == 'Lab' %} active {% endif %}">
-                                    <a href="#" class="waves-effect waves-dark">
-                                        <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
-                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">View Session Request</span>
-                                        <span class="pcoded-mcaret"></span>
-                                    </a>
-                                </li>
+                                
+                                {% if user.role == 'Psychiatrist' %}
+                                    <!-- <li class="{% if nav == 'treat_p' %} active {% endif %}">
+                                        <a href="/meeting/" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.form-components.main">Create Meeting</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li> -->
+                                    <li class="{% if nav == 'Lab' %} active {% endif %}">
+                                        <a href="#" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.form-components.main">View Session Request</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="{% if nav == 'treat_p' %} active {% endif %}">
+                                        <a href="/" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.form-components.main">AI Meeting</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                    <li class="{% if nav == 'create' %} active {% endif %}">
+                                        <a href="/new-meeting/" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.form-components.main">Make Request</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                    
+                                
 
                             </ul>
 
