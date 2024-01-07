@@ -42,10 +42,12 @@ def phsycohomepage(request):
 
 @login_required
 def videocall(request):
-    if request.method == 'POST':
-        roomID = request.POST.get('roomID')
-        print(roomID)
-    return render(request, 'aura/videocall.html', {'name': request.user.full_name})
+    meetingid = 23456
+    context = {
+        'name': request.user.full_name,
+        'id':meetingid
+    }
+    return render(request, 'aura/videocall.html', )
 
 @login_required
 def join_room(request):
