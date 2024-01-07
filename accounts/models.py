@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 # Create your models here.
 from django.contrib.auth import validators
@@ -81,6 +82,7 @@ class User(AbstractBaseUser, TrackingModel):
             'unique':_("A user with that username already exists."),
         },
     )
+    phoneNumberRegex = RegexValidator(regex=r"^\+?1?\d{8,15}$")
     full_name = models.CharField(_('full name'),max_length=200)
     # identification = models.IntegerField(_("identification"), null=True)
     email = models.EmailField(_('email'), unique=True, error_messages={
@@ -88,7 +90,7 @@ class User(AbstractBaseUser, TrackingModel):
     })
     gender = models.CharField(_("gender"), max_length=10, choices=Gender_choices)
     phone = PhoneNumberField(
-        _('phone number'), unique=True,
+        _('phone number'), unique=True,validators=[phoneNumberRegex],
         blank=True, null=True, max_length=27)
     county = models.CharField(_("county"), max_length=50,
                               blank=True, null=True)

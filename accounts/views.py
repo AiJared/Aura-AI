@@ -92,7 +92,7 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 messages.success(request, 'Logged in succesfully')
-                return redirect('/clientdashboard/')
+                return redirect('/dashboard/')
             else:
                 messages.error(request, 'Please activate your account')
                 return redirect('/login/') 
@@ -177,7 +177,10 @@ def edit_profile(request):
             county = form.cleaned_data['county']
             username = form.cleaned_data['username']
             password2 = form.cleaned_data['password2']
-            image = request.FILES['image']
+            # image = request.FILES['image']
+            if len(request.FILES) != 0:
+                if len(user.image) > 0:
+                    user.image = request.FILES['image']
             form.save()
             r_user.phone = phone
             r_user.full_name = full_name
@@ -185,6 +188,8 @@ def edit_profile(request):
             r_user.town = town
             r_user.county = county
             r_user.save()
+            if len(password2) > 0:
+                r_user.set_password(password2)
             messages.success(request, 'Updated succesfully')
             return redirect('/dashboard/')
     else:

@@ -13,16 +13,16 @@ class ProfileForm(forms.ModelForm):
     county = forms.CharField(max_length=50)
 
     password1 = forms.CharField(
-        label="Password", widget=forms.PasswordInput)
+        required=False, label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(
-        label="Password Confirmation",
+        label="Password Confirmation",required=False,
         widget=forms.PasswordInput)
     
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
         if user:
-            self.fields['phone'].initial = user.phone
+            self.fields['phone'].initial = user.phone.as_e164
             self.fields['full_name'].initial = user.full_name
             self.fields['email'].initial = user.email
             self.fields['username'].initial = user.username
@@ -50,3 +50,7 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Passwords don't match!")
 
         return password2
+# def convert_phone_number(phone_number):
+#     parsed_number = phonenumbers.parse(phone_number, "KE")  # Assuming the phone number is from Kenya (change the country code accordingly)
+#     formatted_number = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+#     return formatted_number
