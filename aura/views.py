@@ -14,29 +14,25 @@ def homepage(request):
 
     return render(request, 'index.html',context)
 
-@login_required
-def clienthomepage(request):
-    client = Client.objects.get(user= request.user)
-    requested = Meeting.objects.filter(client = client,is_done=False)
-    done = Meeting.objects.filter(client = client,is_done=True)
-    all = Meeting.objects.all()
-    context = {
-        'requested':requested,
-        'done': done,
-        'all':all,
-    }
-    return render(request,'aura/clientdashboard.html', context)
+
 
 @login_required
-def phsycohomepage(request):
-    psyco = Psychiatrist.objects.get(user= request.user)
-    requested = Meeting.objects.filter(pychiatrist = psyco,is_done=False)
-    done = Meeting.objects.filter(pychiatrist = psyco,is_done=True)
-    all = Meeting.objects.all()
+def dashboard(request):
+    if request.user.role == 'Psychiatrist':
+        user = Psychiatrist.objects.get(user= request.user)
+        requested = Meeting.objects.filter(pychiatrist = user,is_done=False)
+        done = Meeting.objects.filter(pychiatrist = user,is_done=True)
+        all = Meeting.objects.all()
+    else:
+        user = Client.objects.get(user= request.user)
+        requested = Meeting.objects.filter(client = user,is_done=False)
+        done = Meeting.objects.filter(client = user,is_done=True)
+        all = Meeting.objects.all()
     context = {
         'requested':requested,
         'done': done,
         'all':all,
+        'user_':user,
     }
     return render(request,'aura/psycdashboard.html', context)
 

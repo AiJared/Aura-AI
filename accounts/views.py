@@ -179,8 +179,8 @@ def edit_profile(request):
             password2 = form.cleaned_data['password2']
             # image = request.FILES['image']
             if len(request.FILES) != 0:
-                if len(user.image) > 0:
-                    user.image = request.FILES['image']
+                if len(user.profile_picture) > 0:
+                    user.profile_picture = request.FILES['image']
             form.save()
             r_user.phone = phone
             r_user.full_name = full_name

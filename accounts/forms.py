@@ -22,7 +22,7 @@ class ProfileForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
         if user:
-            self.fields['phone'].initial = user.phone.as_e164
+            self.fields['phone'].initial = user.phone
             self.fields['full_name'].initial = user.full_name
             self.fields['email'].initial = user.email
             self.fields['username'].initial = user.username

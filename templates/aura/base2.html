@@ -124,7 +124,7 @@
                             </li>
                             <li class="user-profile header-notification">
                                 <a href="#!" class="waves-effect waves-light">
-                                    <img src="{% static 'assets/images/avatar-4.jpg' %}" class="img-radius" alt="{{ user.profile.profile_picture.url }}">
+                                    <img src="/media/{{ user_.profile_picture }}" class="img-radius" alt="{{ user.profile.profile_picture.url }}">
                                     <span>{{ user.username }}</span>
                                     <i class="ti-angle-down"></i>
                                 </a>
@@ -154,22 +154,22 @@
                         <div class="pcoded-inner-navbar main-menu">
                             <div class="">
                                 <div class="main-menu-header">
-                                    <img class="img-80 img-radius" src="{% static 'assets/images/avatar-4.jpg' %}"
+                                    <img class="img-80 img-radius" src="/media/{{ user_.profile_picture }}"
                                         alt="User-Profile-Image">
                                     <div class="user-details">
-                                        <span id="more-details">{{user.first_name}}  {{user.last_name}}<i class="fa fa-caret-down"></i></span>
+                                        <span id="more-details">{{user.full_name}}</span>
                                     </div>
                                 </div>
 
                                 <div class="main-menu-content">
-                                    <ul>
+                                    <!-- <ul>
                                         <li class="more-details">
                                             <a href="user-profile.html"><i class="ti-user"></i>View Profile</a>
                                             <a href="#!"><i class="ti-settings"></i>Settings</a>
                                             <a href="{% url 'accounts:logout' %}"><i
                                                     class="ti-layout-sidebar-left"></i>Logout</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                 </div>
                             </div>
                             <div class="p-15 p-b-0">
